@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/mvc
+       http://www.springframework.org/schema/mvc/spring-mvc.xsd
+        http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context.xsd">
+    <!--default-autowire="byName"-->
+    <import resource="application-db.xml"/>
+    <!-- 自动扫描cn下面所包（包括子包）下面所有类 的注解
+    如果扫描到有@Component @Controller@Service等这些注解的类，则把这些类注册为bean-->
+    <context:component-scan base-package="cn.itrip.trade">
+        <!--<context:include-filter type="annotation"
+                                expression="org.springframework.stereotype.Controller" />
+        <context:include-filter type="annotation"
+                                expression="org.springframework.context.annotation.Configuration" />-->
+    </context:component-scan>
+    <!--体现swagger2 restFul 风格样式-->
+    <mvc:default-servlet-handler />
+    <!-- Spring 来扫描指定包下的类，并注册被@Component，@Controller，@Service，@Repository等注解标记的组件 -->
+    <mvc:annotation-driven />
+    <!--配置静态资源，直接映射到对应的文件夹，不被DispatcherServlet拦截而出现404找不到图片的问题，
+        3.04新增功能，需要重新设置spring-mvc-3.0.xsd   -->
+    <mvc:resources location="/statics/" mapping="/statics/**"/>
+    <!-- 定义跳转的文件的前后缀 ，视图模式配置-->
+    <bean id="viewResolver"
+          class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <!-- 这里的配置我的理解是自动给后面action的方法return的字符串加上前缀和后缀，变成一个 可用的url地址 -->
+        <property name="prefix" value="/WEB-INF/jsp/" />
+        <property name="suffix" value=".jsp" />
+    </bean>
+</beans>
